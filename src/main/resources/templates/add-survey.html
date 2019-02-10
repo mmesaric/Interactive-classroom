@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="description" content=""/>
+    <meta name="viewport" content="width=device-width"/>
+    <base href="/"/>
+    <link
+            href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
+            rel="stylesheet" id="bootstrap-css">
+    <link href="https://fonts.googleapis.com/css?family=Permanent+Marker"
+          rel="stylesheet">
+    <link rel="stylesheet"  href="../static/site.css" th:href="@{/site.css}"/>
+  
+    <script
+            src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+
+    <title>Interaktivna nastava</title>
+</head>
+<body class="mainback">
+<div class="container-fluid bg-light mr-0 ml-0">
+    <div class="row" style="height: 90px">
+        <div class="col-sm"></div>
+        <div class="heading mt-2" style="color: #000"><a th:href="@{/}" style="color: #000; text-decoration: none;">Interaktivna Nastava</a></div>
+        <div class="col-sm text-right mt-4 mr-2 pt-2"
+             style="font-family: Arial; ">
+            <div>
+                <div th:if="${#httpServletRequest.remoteUser}">
+                    <a th:href="@{/logout}">Odjavite se</a>
+                    <div>Prijavljeni ste kao <i>[[${#httpServletRequest.remoteUser}]]</i></div>
+                </div>
+                <div th:if="${#httpServletRequest.remoteUser == null}">
+                    <a th:href="@{/user-overview}">Prijavite se</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container pt-5 justify-content-center text-center">
+    <h1>Stvaranje ankete</h1>
+    <br>
+    <div class="row ">
+        <div class="card justify-content-center text-center col-sm-12" style="height: 100%; width:60%; background-color: rgba(249, 249, 249, 0.80)">
+            <hr class="mt-0 mb-1">
+            <form class="add-survey-form" action="#" th:action="@{/createSurvey}" th:object="${survey}" method="post">
+                <div id="container">
+                    <div class="form-group">
+                        <div class="row center-label">
+                            <div class="col-sm-4">
+                                <label for="surveyTitle" class="survey-label">Unesite naziv ankete</label>
+                            </div>
+                            <div class="col-sm-8 center-input">
+                                <input type="text" class="form-control" id="surveyTitle" name="name" required><br>
+                            </div>
+                        </div>
+                        <div class="row center-label">
+                            <div class="col-sm-4">
+                                <label for="surveyDescription" class="survey-label">Unesite opis ankete</label>
+                            </div>
+                            <div class="col-sm-8 center-input">
+                                <input type="text" class="form-control" id="surveyDescription" name="description" required><br>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-check">
+                        <div class="row center-label">
+                            <div class="col-sm-4">
+                                <label for="surveyActive" class="survey-label active-survey">Aktivna: </label>
+                            </div>
+                            <div class="col-sm-8 center-input">
+                                <input type="checkbox" class="form-check-label" id="surveyActive" name="isActiveString"><br>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group qa-margin">
+                        <div class="row center-label">
+                            <div class="col-sm-4">
+                                <label class="survey-label">Unesite pitanje</label>
+                            </div>
+                            <div class="col-sm-8 center-input">
+                                <input type="text" class="form-control" name="questions[0]" required><br>
+                            </div>
+                        </div>
+                        <div class="row center-label">
+                            <div class="col-sm-4">
+                                <label class="survey-label">Unesite ponuđene odgovore</label>
+                            </div>
+                            <div class="col-sm-8 center-input">
+                                <input type="text" class="form-control" name="answers[0]" required><br>
+                            </div>
+                            <div class="col-sm-4">
+                            </div>
+                            <div class="col-sm-8 center-input">
+                                <input type="text" class="form-control" name="answers[1]" required><br>
+                            </div>
+                            <div class="col-sm-4">
+                            </div>
+                            <div class="col-sm-8 center-input">
+                                <input type="text" class="form-control" name="answers[2]" required><br>
+                            </div>
+                            <div class="col-sm-4">
+                            </div>
+                            <div class="col-sm-8 center-input">
+                                <input type="text" class="form-control" name="answers[3]" required><br>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mb-3 button-div">
+                    <button type="button" class="btn btn-link" id="filldetails" onclick="addQuestion()">Dodaj pitanje</button>
+                    <button type="submit" class="btn btn-primary" name="save">Pošalji</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script type='text/javascript'>
+        var questionsIndex = 1;
+        var answersIndex = 4;
+
+        function addQuestion() {
+            var container = document.getElementById("container");
+            container.appendChild(document.createElement("br"));
+
+            var formGroup = document.createElement("div");
+            formGroup.className = "form-group qa-margin";
+
+            var rowQuestion = document.createElement("div");
+            rowQuestion.className = "row center-label"
+            var questionLabelDiv = document.createElement("div");
+            questionLabelDiv.className = "col-sm-4";
+            var questionLabel = document.createElement("label");
+            questionLabel.className = "survey-label";
+            questionLabel.innerHTML = 'Unesite pitanje';
+
+            questionLabelDiv.appendChild(questionLabel);
+            rowQuestion.appendChild(questionLabelDiv);
+
+            var questionDiv = document.createElement("div");
+            questionDiv.className = "col-sm-8 center-input";
+            var questionInput = document.createElement("input");
+            questionInput.type = "text";
+            questionInput.className = "form-control";
+            questionInput.name = 'questions[' + questionsIndex++ + ']';
+            questionInput.required = true;
+
+            questionDiv.appendChild(questionInput);
+            questionDiv.appendChild(document.createElement("br"));
+            rowQuestion.appendChild(questionDiv);
+            formGroup.appendChild(rowQuestion);
+
+            var rowAnswers = document.createElement("div");
+            rowAnswers.className = "row center-label";
+
+            var answerLabelDivA = document.createElement("div");
+            answerLabelDivA.className = "col-sm-4";
+            var answerLabel = document.createElement("label");
+            answerLabel.className = "survey-label";
+            answerLabel.innerHTML = 'Unesite ponuđene odgovore';
+
+            answerLabelDivA.appendChild(answerLabel);
+            rowAnswers.appendChild(answerLabelDivA);
+
+            var answerDivA = document.createElement("div");
+            answerDivA.className = "col-sm-8 center-input";
+
+            var answerInputA = document.createElement("input");
+            answerInputA.type = "text";
+            answerInputA.className = "form-control";
+            answerInputA.name = 'answers[' + answersIndex++ + ']';
+            answerInputA.required = true;
+
+            answerDivA.appendChild(answerInputA);
+            answerDivA.appendChild(document.createElement("br"));
+            rowAnswers.appendChild(answerDivA);
+
+            var answerLabelDivB = document.createElement("div");
+            answerLabelDivB.className = "col-sm-4";
+
+            rowAnswers.appendChild(answerLabelDivB);
+
+            var answerDivB = document.createElement("div");
+            answerDivB.className = "col-sm-8 center-input";
+
+            var answerInputB = document.createElement("input");
+            answerInputB.type = "text";
+            answerInputB.className = "form-control";
+            answerInputB.name = 'answers[' + answersIndex++ + ']';
+            answerInputB.required = true;
+
+            answerDivB.appendChild(answerInputB);
+            answerDivB.appendChild(document.createElement("br"));
+            rowAnswers.appendChild(answerDivB);
+
+            var answerLabelDivC = document.createElement("div");
+            answerLabelDivC.className = "col-sm-4";
+
+            rowAnswers.appendChild(answerLabelDivC);
+
+            var answerDivC = document.createElement("div");
+            answerDivC.className = "col-sm-8 center-input";
+
+            var answerInputC = document.createElement("input");
+            answerInputC.type = "text";
+            answerInputC.className = "form-control";
+            answerInputC.name = 'answers[' + answersIndex++ + ']';
+            answerInputC.required = true;
+
+            answerDivC.appendChild(answerInputC);
+            answerDivC.appendChild(document.createElement("br"));
+            rowAnswers.appendChild(answerDivC);
+
+            var answerLabelDivD = document.createElement("div");
+            answerLabelDivD.className = "col-sm-4";
+
+            rowAnswers.appendChild(answerLabelDivD);
+
+            var answerDivD = document.createElement("div");
+            answerDivD.className = "col-sm-8 center-input";
+
+            var answerInputD = document.createElement("input");
+            answerInputD.type = "text";
+            answerInputD.className = "form-control";
+            answerInputD.name = 'answers[' + answersIndex++ + ']';
+            answerInputD.required = true;
+
+            answerDivD.appendChild(answerInputD);
+            answerDivD.appendChild(document.createElement("br"));
+            rowAnswers.appendChild(answerDivD);
+
+            formGroup.appendChild(rowAnswers);
+
+            container.appendChild(formGroup);
+        }
+    </script>
+</body>
+</html>

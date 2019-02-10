@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <title>Interaktivna nastava</title>
+    
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <link href="https://fonts.googleapis.com/css?family=Permanent+Marker" rel="stylesheet">
+    
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+
+
+</head>
+
+<style>
+	body#LoginForm{ background-image:url("https://images.pexels.com/photos/268415/pexels-photo-268415.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"); background-repeat:no-repeat; background-position:center; background-size:cover; padding:10px;}
+	.form-heading { color:#fff; font-size:46px; font-family: 'Permanent Marker', cursive; text-align:center; margin-top:30px; padding-bottom:30px;}
+	.panel p { color:#777777; font-size:14px; margin-bottom:30px; line-height:24px;}
+	.panel h2{ color:#444444; font-size:20px; margin:0 0 8px 0;}
+	.login-form .form-control {
+  background: #f7f7f7 none repeat scroll 0 0;
+  border: 1px solid #d4d4d4;
+  border-radius: 4px;
+  font-size: 14px;
+  height: 50px;
+  line-height: 50px;
+}
+.main-div {
+  background: #ffffff none repeat scroll 0 0;
+  border-radius: 4px;
+  margin: 10px auto 30px;
+  max-width: 38%;
+  padding: 50px 70px 70px 71px;
+}
+
+.login-form .form-group {
+  margin-bottom:10px;
+}
+.login-form{ text-align:center;}
+
+.login-form  .btn.btn-primary {
+  color: #ffffff;
+  font-size: 14px;
+  width: 100%;
+  height: 50px;
+  line-height: 50px;
+  padding: 0;
+}
+
+html,
+body{
+height:100%;
+}
+
+.mistake{color:#FF0000; font-size:14px; margin-bottom:10px; line-height:24px;}
+</style>
+
+<body id="LoginForm" >
+	<div class="container">
+		<h1 class="form-heading"><a th:href="@{/}" style="color: #fff; text-decoration: none;">Interaktivna Nastava</a></h1>
+		<div class="login-form">
+			<div class="main-div">
+
+				<div class="panel">
+					<h2>Prijava</h2>
+<p>Molimo upišite svoje korisničko ime i lozinku</p>
+</div>
+<div class="mistake" th:if="${param.error}">
+    Neispravno korisničko ime i/ili lozinka.
+</div>
+<div class="mistake" th:if="${param.logout}">
+    Odjavljeni ste iz aplikacije.
+</div>
+<form th:action="@{/login}" method="post">
+    <div class="form-group">
+    	<input type="text" class="form-control" name="username" placeholder="Korisničko ime"/>
+    </div>
+    <div class="form-group">
+    	<input type="password" class="form-control" name="password" placeholder="Lozinka"/>
+    </div>
+    
+    <button type="submit" class="btn btn-primary">Prijava</button>
+</form>
+</div>
+</div>
+</div>
+</body>
+</html>

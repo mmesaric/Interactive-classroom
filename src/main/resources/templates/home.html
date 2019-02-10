@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+<title>Interaktivna nastava</title>
+<link
+	href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
+	rel="stylesheet" id="bootstrap-css">
+<link href="https://fonts.googleapis.com/css?family=Permanent+Marker"
+	rel="stylesheet">
+	<link rel="stylesheet"  href="../static/site.css" th:href="@{/site.css}"/>
+<script
+	src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+</head>
+<style>
+	.heading {
+	color: #fff;
+	font-size: 46px;
+	font-family: 'Permanent Marker', cursive;
+	text-align: center;
+	margin-top: 30px;
+	padding-bottom: 30px;
+}
+
+.mainback {
+	background-image:
+		url("https://images.pexels.com/photos/268415/pexels-photo-268415.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260");
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: cover;
+}
+
+html,
+body{
+height:100%;
+}
+</style>
+<body id="homepage" class="mainback" >
+	<div class="container-fluid bg-light mr-0 ml-0">
+		<div class="row" style="height: 90px">
+			<div class="col-sm"></div>
+			<div class="heading mt-2" style="color: #000"><a th:href="@{/}" style="color: #000; text-decoration: none;">Interaktivna Nastava</a></div>
+			<div class="col-sm text-right mt-4 mr-2 pt-2"
+				style="font-family: Arial; ">
+				<div>
+				  	<div th:if="${#httpServletRequest.remoteUser}">
+    					<a th:href="@{/logout}">Odjavite se</a>
+    					<div>Prijavljeni ste kao <i>[[${#httpServletRequest.remoteUser}]]</i></div>
+					</div>
+					<div th:if="${#httpServletRequest.remoteUser == null}">
+    					<a th:href="@{/user-overview}">Prijavite se</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="container pt-4 justify-content-center text-center">
+		<h1>Dobrodošli! </h1>
+		<h3>Ako ste nastavnik, prijavite se kako biste stvarali ankete.</h3>
+		<br>
+		<div class="row ">
+		<div class="card justify-content-center text-center col-12" style="height: 100%; width:60%; background-color: rgba(249, 249, 249, 0.80)">
+		<h4 class="card-title">Ankete</h4>
+		<hr class="mt-0 mb-1">
+		<table class="mb-3">
+    		<tr>
+        		<th>Naziv</th>
+        		<th>Opis</th>
+        		<th>Kreirao</th>
+    		</tr>
+    		<tr th:each="survey : ${surveys}">
+        		<td th:text="${survey.surveyName}"></td>
+        		<td th:text="${survey.description}"></td>
+       			<td th:text="${survey.user.username}"></td>
+    		</tr>
+		</table>
+		<div class="mb-3">
+		<a th:href="@{/user-overview}" class="btn btn-primary">Pregled i stvaranje anketa</a>
+		</div>
+		</div>
+    </div>
+    
+</div>
+</body>
+</html>

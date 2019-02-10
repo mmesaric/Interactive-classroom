@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <title>Interaktivna nastava</title>
+    <link
+	href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
+	rel="stylesheet" id="bootstrap-css">
+<link href="https://fonts.googleapis.com/css?family=Permanent+Marker"
+	rel="stylesheet">
+	<link rel="stylesheet"  href="../static/site.css" th:href="@{/site.css}"/>
+<script
+	src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript" th:inline="javascript">
+	/*<![CDATA[*/
+		google.charts.load('current', {'packages':['corechart']});
+      	//google.charts.setOnLoadCallback(drawCharts);
+      	
+		function myFunction(id) {
+			var x = document.getElementById("piechart");
+			var questions = /*[[${questions}]]*/;
+			var quest;
+			questions.forEach(function(element) {
+				if(element.id == id) {
+					quest=element;
+				}
+			})
+			var table = [
+				['Answer', 'Number of answers']
+			];
+			quest.answers.forEach(function(e) {
+  				table.push([e.answerText, e.votes])
+  			});
+			
+			var data = google.visualization.arrayToDataTable(table);
+
+  	        var options = {
+  				title: quest.questionText,
+  				sliceVisibilityThreshold:0
+  	        };
+  	        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+  	        chart.draw(data, options);
+			
+		};
+		
+		function backToSurvey () {
+			var survey = /*[[${survey}]]*/;
+	        document.location.href = 'http://localhost:8080/survey-overview/'+survey.id.toString(), true;
+	    };
+	
+    /*]]>*/
+    </script>
+</head>
+
+<style>
+	.heading {
+	color: #fff;
+	font-size: 46px;
+	font-family: 'Permanent Marker', cursive;
+	text-align: center;
+	margin-top: 30px;
+	padding-bottom: 30px;
+}
+
+.mainback {
+	background-image:
+		url("https://images.pexels.com/photos/268415/pexels-photo-268415.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260");
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: cover;
+}
+
+html,
+body{
+height:100%;
+}
+</style>
+
+<body  class="mainback">
+<div class="container-fluid bg-light mr-0 ml-0">
+		<div class="row" style="height: 90px">
+			<div class="col-sm"></div>
+			<div class="heading mt-2" style="color: #000"><a th:href="@{/}" style="color: #000; text-decoration: none;">Interaktivna Nastava</a></div>
+			<div class="col-sm text-right mt-4 mr-2 pt-2"
+				style="font-family: Arial">
+				<div>
+					<div th:if="${#httpServletRequest.remoteUser}">
+    					<a th:href="@{/logout}">Odjavite se</a>			
+    					<div>Prijavljeni ste kao <i>[[${#httpServletRequest.remoteUser}]]</i></div>			
+					</div>
+					<div th:if="${#httpServletRequest.remoteUser == null}">
+    					<a th:href="@{/user-overview}">Prijavite se</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row" th:if="${message != null}">
+        <div class="card justify-content-center text-center col-12" style="height: 100%; width:60%; background-color: rgba(249, 249, 249, 0.80)">
+            <h3 th:text="${message}"></h3>
+        </div>
+   	</div>
+   	<div class="row" th:if="${wrongUser != null}">
+        <div class="card justify-content-center text-center col-12" style="height: 100%; width:60%; background-color: rgba(249, 249, 249, 0.80)">
+            <h3 th:text="${wrongUser}"></h3>
+        </div>
+   	</div>
+	<div class="container pt-3 pb-3" th:if="${message == null && wrongUser == null}">
+		<h1 class="text-center">Statistika</h1>
+		<div class=" card justify-content-center text-center col-12" style="height: 100%; background-color: rgba(249, 249, 249, 0.80)">
+		<div class="row text-center justify-content-center pt-2 pb-2">
+			<div class="col-8-sm">
+				<h3><span th:text="${survey.surveyName}"></span></h3>
+			</div>
+			<div class="col-4 mt-2" align="right">
+			<button class="btn btn-primary btn-sm" th:onClick="|backToSurvey()|"> Povratak na anketu </button>
+			</div>
+		</div>
+		<div class="row justify-content-center">
+
+		<div  class="col-4-sm" align="left" th:if="${questions != null}">
+		    
+		    <ol>
+		    	<li th:each="question:${questions}">
+		    		<button class="btn btn-primary mb-3" th:onclick="|myFunction(${question.id})|">
+		    			<span th:text="${question.questionText}"></span>
+		   			</button>
+		   			
+		    	</li>
+		    	
+		    </ol>
+		</div>
+		<div class="col-1"></div>
+		<div class="col-7-sm justify-content-right pb-3" align="right" id="piechart" style=" width:600px; height: 400px;"> </div>
+		</div>
+</div>
+</div>
+</body>
